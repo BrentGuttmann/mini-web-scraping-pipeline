@@ -23,4 +23,3 @@ dir_path: str = os.path.dirname(os.path.realpath(__file__))
 output_file: str = dir_path+'/data1/output.json'
 with open(output_file, 'w') as the_file:
     the_file.write(content)
-    # json.dump(content, the_file)
