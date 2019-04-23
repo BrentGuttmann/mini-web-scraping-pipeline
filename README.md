@@ -8,14 +8,23 @@ This repo is forked from [this template python project](https://github.com/dwd-u
 
 ## Quick Start
 
-From a linux-like OS with `git` installed:
+From a linux-like OS:
 
-```bash
-    git clone https://github.com/dwd-umd/miniWebScrapingPipeline.git
-    cd miniWebScrapingPipeline
-    source _initial_setup.sh
-    sh _run_pipeline_1.sh
-```
+- Make sure you have the following installed and find-able in your `$PATH` paths:
+
+  - `git`
+  - `python3`
+  - `pipenv` (run `pip3 install --user pipenv`; you might need to add `~/.local/bin` to your `$PATH` paths).
+
+- Run `git clone https://github.com/dwd-umd/miniWebScrapingPipeline.git; cd miniWebScrapingPipeline`
+
+- Run `cp .env-template .env` and set the value of `PYTHON_3_5_OR_HIGHER` to point to your `python3` executable
+
+- Run `source _initial_setup.sh`
+
+- Note: when I tried running this repo on a Debian Stretch (linux for RPi), I got an error related to pipenv installs that required regeneration of `Pipfile.lock` with the command `pipenv lock`
+
+- Run `sh _run_pipeline_1.sh`
 
 These commands are designed to generate a list of extracted text items in the directory `/pipeline1/data1/extracted-text.txt`.
 
