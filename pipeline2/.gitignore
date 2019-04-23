@@ -1,0 +1,6 @@
+# Exclude data directories from git repo
+data0
+data1
+
+# Make exception for source file
+!data0/source.html

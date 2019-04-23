@@ -73,13 +73,25 @@ echo '''
 if [[ $init_stage -le 0 && $last_stage -ge 0 ]]; then
 
     # Make sure output data directory exists for this stage
-    if [[ ! -d pipeline1/data1 ]]; then mkdir pipeline1/data1; fi
+    if [[ ! -d pipeline2/data1 ]]; then mkdir pipeline2/data1; fi
 
     # Extract entries from pipeline1/data0/source.html
     echo '''
         <<< STAGE 0 >>>
     '''
-    python pipeline1/stage0.py
+    python pipeline2/stage0.py
+fi
+
+if [[ $init_stage -le 1 && $last_stage -ge 1 ]]; then
+
+    # Make sure output data directory exists for this stage
+    if [[ ! -d pipeline2/data2 ]]; then mkdir pipeline2/data2; fi
+
+    # Load data from data1/output.json
+    echo '''
+        <<< STAGE 1 >>>
+    '''
+    python pipeline2/stage1.py
 fi
 
 ###################################################################
