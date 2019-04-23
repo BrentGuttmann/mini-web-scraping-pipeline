@@ -34,7 +34,7 @@ for link in soup.select('li.slide .rollover_description_inner'):  # †
 
 
 # Loop through our string array and print entries to output file
-output_file: str = dir_path+"/data1/extracted-text.txt"
+output_file: str = dir_path+"/data1/target-text.txt"
 with open(output_file, 'w') as text_file:
     for entry in text_entries:
         print(entry, file=text_file)

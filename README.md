@@ -46,6 +46,8 @@ You can tell this page uses javascript by examining it with the Chrome devloper 
 
 When this html is first loaded into the browser, it has `<script>` tags fire off javascript. This javascript will call for data from an API and use that data to dynamically inject new html tags into the page body. You can see the effects of this by going to `View > Developer > Inspect Elements` in Chrome. This will open a panel with all of your effective html. If you do a word search for some of the target text, you'll see the divs, etc. that got created by the javascript.
 
+An important aspect of this page is that it does NOT load all of our desired text by default! Rather, it loads the data in chunks ('pages') when you press a button labelled 'MORE', which triggers some javascript which calls the API for the next 25 entries in the list and injects the data into new HTML elements. Each of the three different approaches outlined below has to accommodate this complexity in their own way.
+
 ## Pipelines: General Concept
 
 A pipeline is a set of scripts that takes an input data set and sequentially outputs modified data sets. By breaking a pipeline up into multiple steps of input and output files, you make your data-modification process easier to debug and develop.
@@ -56,18 +58,61 @@ By contrast, if you put all of your web scraping into a single script then it mi
 - Your development flow might slow down; if you're working on a part of the pipeline towards the end then you'd have to keep running everything from start to finish to debug and develop; with a pipeline you can run from the stage that takes as input your last recorded output file
 - Your single script might get long and difficult to read
 
-These pipelines are built with `bash` and `python3`. Bash is used to trigger different "stages" of the pipeline. triggering a stage in the pipeline essentially means running a single `python3` script.
+These pipelines are built with `bash` and `python3`. Bash is used to trigger different "stages" of the pipeline. Triggering a stage in the pipeline essentially means running a single `python3` script.
+
+These pipeline scripts all take the form `_run_pipeline_X.sh`, and they take two optional arguments: the first is the starting stage, the second is the ending stage of the pipeline to execute. Each `_run_pipeline_X.sh` bash script fires python scripts in a corresponding directory `pipelineX/`. These directories also contain directories of the form `dataY` where `Y` gives the stage at which the script will output data.
+
+For example, if you run `sh _run_pipeline_1.sh` (without arguments), it will go through all stages. This pipeline happens to only have one stage that runs a python script `/pipeline1/stage1.py` that reads data from `pipeline1/data0/source.html` and outputs the processed data to `pipeline1/target-text.txt`.
 
 ## Three Example Pipelines
 
 The following three pipelines demonstrate different ways to get the same data. (In this particular instance, the second pipeline is "the best" approach; the first and second are provided for completeness.)
 
+All three pipelines are expected to generate a final file `target-text.txt` in their respective pipeline directories, and the content of each file is expected to be identical to the other two.
+
 ### Pipeline 1: Copy/Paste Javascript-Enriched HTML
 
 To operate this pipeline, run `sh _run_pipeline_1.sh` with no arguments.
 
+This is the crudest approach where you simply load the page into Chrome, manually click the 'MORE' button ~25 times (like an idiot), open the 'inspect elements' panel, and copy and paste the javascript-enriched html from there into a file `pipeline1/data0/source.html`. The pipeline will then run a script to load in this javascript-enriched html and uses the [Beautiful Soup]() library to parse the html and extract the target text.
+
+Although crude, this approach is rather simple and is recommended if you are trying to get data from a javascript-enriched webpage for which, for whatever reason, you don't have access to the underlying API.
+
+## Pipeline 2: Ignore the HTML, Just Use the Site's Data API
+
+To operate this pipeline, run `sh _run_pipeline_2.sh` with no arguments.
+
+This is the best way to get the data, because it doesn't involve scraping and parsing html, rather, it directly uses the clean crisp data provided by the site's API.
+
+This can be expressed as a general principle. Whenever you want to get data from a site that uses javascript to dynamically load content, it will almost always be getting that data from an API that delivers the data in JSON format. If the data is public, then you'll almost certainly be able to use the underlying API without any credentials.
+
+So how do you find the URL for the underlying data API?
+
+In Chrome, open the developer tools panel (e.g. `View > Developer > Javascript console`) and select the `Network` tab. Now refresh the page, and you'll see this Network tab get populated with entries representing the various http requests that got triggered by loading this page. (The very first request will be for this page's original html; if you click on that first entry and then select the 'Response' tab, you'll be able to see the same original html that you saw when you clicked on `View > Developer > View Source`.)
+
+Now, to find the http request in the list Network calls that was triggered to get data from the API, you need to look through all these entries for a route with an API-like format. In this case, it's one with lots of query parameters that looks like this:
+
+```
+?page=0&per_page=25&order=created_at+desc&search=&tags=dawn%3Aceres&condition_1=1%3Ais_in_resource_list&category=51
+```
+
+If you select this entry in the Network tab and view the `Response` (in yet a nother tab menu), you'll see structured data in JSON format. Likewise, if you copy that full route to the API (right click and select `Copy Address`) and paste it into a new browser window, you'll be able to see the JSON object more clearly in all its glory.
+
+NOTE: if you paste an API URL into Firefox, it will neatly format the returned JSON object automatically. Chrome will also do this if you add the Chrome extension [JSON Formatter](https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en) (recommended).
+
+Once you've identified the data API route, you'll want in general to play around with the query parameters to understand how it works. In this case, you'll discover that by changing the value of `per_page=25` to `per_page=99999999999`, you can get back ALL of the available data in a single call (which will save us from having to do pagination logic in our script!).
+
+Now that we have a (modified) API route, all the pipeline has to do is make an HTTP GET REQUEST to this modified url and save the JSON object to file. Then, in the next and final stage of the pipeline, we extract the data we want from that JSON object, and output it to a simple text file.
+
 ## Pipeline 3: Trigger JS in Simulated Browser
 
-For this approach you need:
+To operate this pipeline, run `sh _run_pipeline_3.sh` with no arguments.
 
-- `geckodriver`. If you're on a Mac, you can install this with `brew install geckodriver`. If you're on linux then there are some instructions [here](https://askubuntu.com/a/871077/896933)
+This is the most involved but also coolest approach. We're going to download the simple original html then programmatically trigger the javascript in a browser that we control from our python script. (This same sort of technique is used for testing front-end code as part of a [continuous-development/integration](https://en.wikipedia.org/wiki/CI/CD) pipeline.)
+
+For this approach, we need the following tools installed on our OS:
+
+- You need to have a standard installation of Google Chrome
+- You need to install `chromedriver`. On a Mac just use homebrew: `brew cask install chromedriver`. However you install it, you need to make sure that the `chromedriver` executable can be found on your `$PATH` paths.
+
+When you run the pipeline, the first python stage will programmatically open a Chrome browser, execute any javascript that's supposed to be automatically triggered, then sequentially scrol down and click on the `MORE` button (triggerring data to be fetched from the API and dynamically injected into the HTML) until no more data remains to be fetched. The script will then extract the final javascript-enriched html and save it to file. (This file is essentially the same as the zeroth data file in piepline1.) The next and final stage will then use Beautiful Soup again to extract the salient data and output our target text.

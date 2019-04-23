@@ -1,15 +1,5 @@
 #!/bin/bash
 
-'-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_
-
-This script is designed to take two optional numeric arguments.
-The first argument specifies the starting stage of the pipeline.
-The second argument specifies the stopping stage of the pipeline.
-By default, the pipeline will start at stage 0 and end at the
-final stage.
-
--^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^'
-
 ###################################################################
 # 1. Check Argument Types
 ###################################################################

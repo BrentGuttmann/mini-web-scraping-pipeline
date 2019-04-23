@@ -24,7 +24,7 @@ for item in data['items']:
     text_entries.append(soup.get_text().strip())
 
 # Output list of items to text file
-output_file: str = dir_path+"/data2/extracted-text.txt"
+output_file: str = dir_path+"/data2/target-text.txt"
 with open(output_file, "w") as text_file:
     for entry in text_entries:
         print(entry, file=text_file)

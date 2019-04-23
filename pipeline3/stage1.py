@@ -4,10 +4,9 @@ This approach downloads the bare html then triggers the JS in our python script 
 '''
 
 import os
-import json
-from requests import Response, get
-from selenium import webdriver
 import time
+import typing
+from selenium import webdriver
 
 # Set the url for the javascript-enriched webpage
 urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' + \
@@ -17,7 +16,7 @@ urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' +
 # Set up our browser driver
 # Note: if 'chromedriver' is not in your $PATH paths, then you need to set here:
 # driver = webdriver.Chrome('/path/to/chromedriver')
-driver = webdriver.Chrome()
+driver: typing.Any = webdriver.Chrome()
 
 # Get the web page with Chrome; Chrome will execute the automatically triggered JS as normal
 driver.get(urlpage)
@@ -74,10 +73,10 @@ for i in range(1, int(1000/25)):
     except:
         print(
             '''
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                MORE BUTTON NOT FOUND
-    (this implies all available items got loaded)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                MORE BUTTON NOT FOUND
+                    (this implies all available items got loaded)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             '''
         )
         break
