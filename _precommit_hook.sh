@@ -9,6 +9,7 @@ echo '''
 '''
 
 # Auto-format all python scripts
-.venv/bin/autopep8 -ir src/**
-.venv/bin/autopep8 -ir tests/**
+.venv/bin/autopep8 -ir pipeline1/**
+.venv/bin/autopep8 -ir pipeline2/**
+.venv/bin/autopep8 -ir pipeline3/**
 git add .
