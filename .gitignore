@@ -6,3 +6,9 @@ pytest_unit.xml
 **/*.log
 .DS_Store
 .redundant
+
+**/data0/**
+**/data1/**
+**/data2/**
+**/data3/**
+**/data4/**
