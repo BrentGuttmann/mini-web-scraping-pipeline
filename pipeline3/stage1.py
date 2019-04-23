@@ -4,19 +4,22 @@ This approach downloads the bare html then triggers the JS in our python script 
 '''
 
 import os
+import sys
 import time
 import typing
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 # Set the url for the javascript-enriched webpage
 urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' + \
     'page=0&per_page=25&order=created_at+desc&search=&' + \
     'tags=dawn%3Aceres&condition_1=1%3Ais_in_resource_list&category=51'
 
-# Set up our browser driver
-# Note: if 'chromedriver' is not in your $PATH paths, then you need to set here:
-# driver = webdriver.Chrome('/path/to/chromedriver')
-driver: typing.Any = webdriver.Chrome()
+# Set up our browser driver; ig 'headless' is supplied as argument then suppress browser launch
+chrome_options: typing.Any = Options()
+if len(sys.argv) > 1 and sys.argv[1] == 'headless':
+    chrome_options.add_argument("--headless")
+driver: typing.Any = webdriver.Chrome(options=chrome_options)
 
 # Get the web page with Chrome; Chrome will execute the automatically triggered JS as normal
 driver.get(urlpage)

@@ -65,10 +65,11 @@ if [[ $init_stage -le 1 && $last_stage -ge 1 ]]; then
     # Make sure output data directory exists for this stage
     if [[ ! -d pipeline3/data1 ]]; then mkdir pipeline3/data1; fi
 
-    # ...
+    # Run chrome locally with selenium; add arg `headless` to run in headless mode
     echo '''
         <<< STAGE 1 >>>
     '''
+    # python pipeline3/stage1.py headless
     python pipeline3/stage1.py
 fi
 
