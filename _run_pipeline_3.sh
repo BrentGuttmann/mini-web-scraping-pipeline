@@ -1,6 +1,6 @@
 #!/bin/bash
 
-:'-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_
+'-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_
 
 This script is designed to take two optional numeric arguments.
 The first argument specifies the starting stage of the pipeline.
@@ -11,11 +11,11 @@ final stage.
 -^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^-_-^'
 
 ###################################################################
-#1. Check Argument Types
+# 1. Check Argument Types
 ###################################################################
 
 #1.1. Set default values for starting and stopping pipeline stages
-init_stage=0
+init_stage=1
 last_stage=99999
 
 #1.2. Check if single-argument case has a numeric argument
@@ -47,7 +47,7 @@ if [[ $# -ge 2 ]]; then
 fi
 
 ###################################################################
-#2. Print what stages are to be processed
+# 2. Print what stages are to be processed
 ###################################################################
 
 end_message='END'
@@ -67,25 +67,13 @@ echo '''
 '''
 
 ###################################################################
-#3. Begin Pipeline
+# 3. Begin Pipeline
 ###################################################################
 
-if [[ $init_stage -le 0 && $last_stage -ge 0 ]]; then
+if [[ $init_stage -le 1 && $last_stage -ge 1 ]]; then
 
     # Make sure output data directory exists for this stage
     if [[ ! -d pipeline3/data1 ]]; then mkdir pipeline3/data1; fi
-
-    # ...
-    echo '''
-        <<< STAGE 0 >>>
-    '''
-    python pipeline3/stage0.py
-fi
-
-if [[ $init_stage -le 0 && $last_stage -ge 0 ]]; then
-
-    # Make sure output data directory exists for this stage
-    if [[ ! -d pipeline3/data2 ]]; then mkdir pipeline3/data2; fi
 
     # ...
     echo '''
@@ -94,8 +82,20 @@ if [[ $init_stage -le 0 && $last_stage -ge 0 ]]; then
     python pipeline3/stage1.py
 fi
 
+if [[ $init_stage -le 2 && $last_stage -ge 2 ]]; then
+
+    # Make sure output data directory exists for this stage
+    if [[ ! -d pipeline3/data2 ]]; then mkdir pipeline3/data2; fi
+
+    # ...
+    echo '''
+        <<< STAGE 2 >>>
+    '''
+    python pipeline3/stage2.py
+fi
+
 ###################################################################
-#4. Finish
+# 4. Finish
 ###################################################################
 
 echo '''
