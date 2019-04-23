@@ -38,3 +38,9 @@ Python is a very handy language for writing a pipeline. A pipeline is a set of s
 ## Pipeline 1: Simple HTML
 
 To operate this pipeline, run `sh _run_pipeline_1.sh` with no arguments.
+
+## Pipeline 3: Trigger JS in Simulated Browser
+
+For this approach you need:
+
+- `geckodriver`. If you're on a Mac, you can install this with `brew install geckodriver`. If you're on linux then there are some instructions [here](https://askubuntu.com/a/871077/896933)
