@@ -15,11 +15,16 @@ urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' +
     'page=0&per_page=25&order=created_at+desc&search=&' + \
     'tags=dawn%3Aceres&condition_1=1%3Ais_in_resource_list&category=51'
 
-# Set up our browser driver; ig 'headless' is supplied as argument then suppress browser launch
-chrome_options: typing.Any = Options()
-if len(sys.argv) > 1 and sys.argv[1] == 'headless':
-    chrome_options.add_argument("--headless")
-driver: typing.Any = webdriver.Chrome(options=chrome_options)
+# Choose between phantomjs- and chrome- browser drivers
+driver: typing.Any
+if len(sys.argv) > 1 and sys.argv[1] == 'phantomjs':
+    driver = webdriver.PhantomJS()
+else:
+    options: typing.Any = Options()
+    if len(sys.argv) > 1 and sys.argv[1] == 'headless':
+        options.add_argument("--headless")
+    driver = webdriver.Chrome(options=options)
+
 
 # Get the web page with Chrome; Chrome will execute the automatically triggered JS as normal
 driver.get(urlpage)

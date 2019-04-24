@@ -70,6 +70,7 @@ if [[ $init_stage -le 1 && $last_stage -ge 1 ]]; then
         <<< STAGE 1 >>>
     '''
     # python pipeline3/stage1.py headless
+    # python pipeline3/stage1.py phantomjs
     python pipeline3/stage1.py
 fi
 
