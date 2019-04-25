@@ -1,7 +1,7 @@
-'''
+"""
 STAGE 0 of PIPELINE 3
 This approach downloads the bare html then triggers the JS in our python script to populate the full html
-'''
+"""
 
 import os
 import sys
@@ -17,13 +17,10 @@ urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' +
 
 # Choose between phantomjs- and chrome- browser drivers
 driver: typing.Any
-if len(sys.argv) > 1 and sys.argv[1] == 'phantomjs':
-    driver = webdriver.PhantomJS()
-else:
-    options: typing.Any = Options()
-    if len(sys.argv) > 1 and sys.argv[1] == 'headless':
-        options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
+options: typing.Any = Options()
+if len(sys.argv) > 1 and sys.argv[1] == 'headless':
+    options.add_argument("--headless")
+driver = webdriver.Chrome(options=options)
 
 
 # Get the web page with Chrome; Chrome will execute the automatically triggered JS as normal
