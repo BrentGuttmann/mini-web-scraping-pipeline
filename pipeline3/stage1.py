@@ -10,20 +10,35 @@ import typing
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+from pyvirtualdisplay import Display
+
+display = Display(visible=0, size=(800, 600))
+display.start()
+
 # Set the url for the javascript-enriched webpage
 urlpage: str = 'https://solarsystem.nasa.gov/missions/dawn/galleries/images/?' + \
     'page=0&per_page=25&order=created_at+desc&search=&' + \
     'tags=dawn%3Aceres&condition_1=1%3Ais_in_resource_list&category=51'
 
 # Choose between phantomjs- and chrome- browser drivers
-driver: typing.Any
-if len(sys.argv) > 1 and sys.argv[1] == 'phantomjs':
-    driver = webdriver.PhantomJS()
-else:
-    options: typing.Any = Options()
-    if len(sys.argv) > 1 and sys.argv[1] == 'headless':
-        options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
+# driver: typing.Any
+# if len(sys.argv) > 1 and sys.argv[1] == 'phantomjs':
+#     driver = webdriver.PhantomJS()
+# else:
+#     options: typing.Any = Options()
+#     if len(sys.argv) > 1 and sys.argv[1] == 'headless':
+#         options.add_argument("--headless")
+#     driver = webdriver.Chrome(options=options)
+
+profile = webdriver.FirefoxProfile()
+profile.native_events_enabled = False
+driver = webdriver.Firefox(profile)
+driver.set_page_load_timeout(60)
+
+print("debug0")
+
+# driver.get("http://www.duckduckgo.com")
+# print(driver.page_source.encode('utf-8'))
 
 
 # Get the web page with Chrome; Chrome will execute the automatically triggered JS as normal

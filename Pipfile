@@ -16,6 +16,7 @@ typed-ast = "*"
 bs4 = "*"
 requests = "*"
 selenium = "*"
+pyvirtualdisplay = "*"
 
 [requires]
 python_version = "3.7"
