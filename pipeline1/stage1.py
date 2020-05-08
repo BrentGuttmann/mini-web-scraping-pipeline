@@ -1,8 +1,8 @@
 '''
 STAGE 0 of PIPELINE 1
-This approach copies the html elements from the Chrome console and pastes the content 
-into the file /data0/source.html. This enables the html to be obtained after the javascript 
-bundle has run in the browers and injected the dynamic data into the html. This script then 
+This approach copies the html elements from the Chrome console and pastes the content
+into the file /data0/source.html. This enables the html to be obtained after the javascript
+bundle has run in the browers and injected the dynamic data into the html. This script then
 loads the saved html source from file and extracts the desired text from specified divs.
 Download link: https://solarsystem.nasa.gov/missions/dawn/galleries/images/?page=0&per_page=25
 &order=created_at+desc&search=&tags=dawn%3Aceres&condition_1=1%3Ais_in_resource_list&category=51
@@ -11,6 +11,7 @@ Download link: https://solarsystem.nasa.gov/missions/dawn/galleries/images/?page
 import os
 import typing
 from bs4 import BeautifulSoup
+
 
 # Read contents of 'source.html' into string 'html'
 dir_path: str = os.path.dirname(os.path.realpath(__file__))

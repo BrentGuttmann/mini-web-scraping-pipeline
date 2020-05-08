@@ -1,6 +1,6 @@
 '''
 STAGE 1 of PIPELINE 2
-This approach uses the site's data API to get the data directly 
+This approach uses the site's data API to get the data directly
 (without having to scrape and parse any html)
 '''
 

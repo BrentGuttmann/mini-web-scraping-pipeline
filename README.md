@@ -18,11 +18,11 @@ From a linux-like OS:
 
 - Run `git clone https://github.com/dwd-umd/miniWebScrapingPipeline.git; cd miniWebScrapingPipeline`
 
-- Run `cp .env-template .env` and set the value of `PYTHON_3_5_OR_HIGHER` to point to your `python3` executable
+- Run `cp .env-template .env` and set the value of `PYTHON_3_5_OR_HIGHER` to point to your preferred `python3` executable (use `which -a python3` to show all available python3 executables on your system; make sure that your executable is at least `v3.5.0` using `/path/to/your/python3 -V`)
 
 - Run `source _initial_setup.sh`
 
-- Note: when I tried running this repo on a Debian Stretch (linux for RPi), I got an error related to pipenv installs that required regeneration of `Pipfile.lock` with the command `pipenv lock`
+- Note: when I tried running this repo on a Debian Stretch OS (linux for Raspberry Pi), I got an error related to pipenv installs; in such cases, you might want to just use the more reliable
 
 - Run `sh _run_pipeline_1.sh`
 
